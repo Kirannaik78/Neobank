@@ -1,0 +1,20 @@
+# The main pipeline for neo_bank
+
+resources:
+  pipelines:
+    neo_bank_etl:
+      name: neo_bank_etl
+      catalog: ${var.catalog}
+      schema: ${var.schema}
+      serverless: true
+      root_path: "../src/neo_bank_etl"
+
+      libraries:
+        - glob:
+            include: ../src/neo_bank_etl/transformations/**
+
+      environment:
+        dependencies:
+          # We include every dependency defined by pyproject.toml by defining an editable environment
+          # that points to the folder where pyproject.toml is deployed.
+          - --editable ${workspace.file_path}
